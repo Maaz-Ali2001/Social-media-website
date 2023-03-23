@@ -1,0 +1,73 @@
+{% load static %}
+<html>
+<head>
+<style>
+* {
+  box-sizing: border-box;
+}
+
+.column {
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+
+
+
+}
+img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Clearfix (clear floats) */
+.row::after {
+  content: "";
+  clear: both;
+  padding: 20px;
+  display: table;
+
+
+}
+div {
+  margin-right: 120px;
+  margin-left: 20px;
+}
+
+</style>
+</head>
+<body>
+
+<h2 align="center">News Feed</h2>
+<button style="margin:auto" onclick="window.location.href='{% url 'socialmedia:upload' %}';">Upload image</button>
+
+<div class="column">
+      {% for img in post %}
+  <div class="row">
+    <img src="/{{img.post}}">
+      </div>
+      <p>Comments</p>
+
+          <form action='{% url "socialmedia:feed" %}' method="post">
+  {% csrf_token %}
+            <label for="add_comment"><b>Comment</b></label>
+                <input type="hidden"  name="email_id"  value="{{email_id}}" required>
+              <input type="hidden"  name="img_id" id="img_id" value="{{img.id}}" required>
+    <input type="text" placeholder="Enter comment" name="add_comment"  id="add_comment" required>
+              <button type="submit"> Submit </button>
+              </form>
+
+      {% for com in comment %}
+
+          {% for c in com %}
+        {% if img.id == c.post_id %}
+      <p>{{c.comment}}</p>
+        {% endif %}
+    {% endfor %}{% endfor %}
+  </div>
+
+</div>
+{% endfor %}
+
+</body>
+</html>
